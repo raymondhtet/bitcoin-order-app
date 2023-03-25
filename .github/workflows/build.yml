@@ -36,12 +36,16 @@ jobs:
         if: steps.cache-nodemodules.outputs.cache-hit != 'true'
         run: |
           npm ci --force
+          npm run build:ci
       - name: Build
         run: |
           npm run build --force
       - name: Lint
         run: |
           npm run lint
+      - name: Audit
+        run: |
+          npm audit fix
       - name: Update types to latest
         run: |
           npm install --save-dev @types/node@latest --force
@@ -67,4 +71,6 @@ jobs:
       - name: Deploy
         run: |
           npm run deploy
-
+      - name: Delete Feature branches
+        run: |
+          git push origin -d test-branch
